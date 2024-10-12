@@ -11,7 +11,6 @@ root.render(
     <NextUIProvider>
       <App/>
     </NextUIProvider>
-   
   </React.StrictMode>
 );
 

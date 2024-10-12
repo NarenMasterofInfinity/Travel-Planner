@@ -1,8 +1,15 @@
 import React from "react";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link, Button} from "@nextui-org/react";
-
-const Header = () =>{
-    return (
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  Link,
+  Button,
+} from "@nextui-org/react";
+import { Link as RouterLink } from "react-router-dom";
+const Header = () => {
+  return (
     <Navbar position="static">
       <NavbarBrand>
         <p className="font-bold text-inherit">Travel-Planner</p>
@@ -15,7 +22,7 @@ const Header = () =>{
         </NavbarItem>
         <NavbarItem isActive>
           <Link href="#" aria-current="page">
-            Itineraries
+            <RouterLink to="/itinerary">Itineraries</RouterLink>
           </Link>
         </NavbarItem>
         <NavbarItem>
@@ -40,7 +47,7 @@ const Header = () =>{
         </NavbarItem>
       </NavbarContent>
     </Navbar>
-    );
-}
+  );
+};
 
 export default Header;

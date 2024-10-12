@@ -1,0 +1,8 @@
+.custom-card {
+  border: 1px solid transparent; /* default border */
+  transition: border-color 0.3s ease; /* smooth transition */
+}
+
+.custom-card:hover {
+  border-color: #34e0a1; /* primary color */
+}
