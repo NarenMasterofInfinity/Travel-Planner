@@ -367,7 +367,54 @@ const TravelPage = () => {
                     <TripPlanner />
                   </Box>
                 )}
+                {selectedTab === 1 && (
+                  <Box sx={{ width: '100%', padding: 2 }}>
+                    <Typography variant="body1">
+                      Recommended activities for you based on your preferences
+                      and past trips.
+                    </Typography>
+                    <Grid2 container spacing={3}>
+                      {recommendedActivities.map((activity, index) => (
+                        <Grid2 item xs={12} sm={6} md={4} key={index}>
+                          <Card>
+                            <CardMedia
+                              component="img"
+                              height="100"
+                              image={activity.image}
+                              alt={activity.title}
+                            />
+                            <CardContent>
+                              <Typography
+                                variant="h6"
+                                fontWeight="bold"
+                                gutterBottom
+                              >
+                                {activity.title}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
+                                {activity.date} • {activity.location}
+                              </Typography>
+                            </CardContent>
+                          </Card>
+                        </Grid2>
+                      ))}
+                    </Grid2>
+                    {/* Content for "For You" tab */}
+                  </Box>
+                )}
               </Paper>
+            </Paper>
+          </Box>
+          <Box sx={{ width: "33.33%" }}>
+            <Paper elevation={3} sx={{ height: 320, padding: 2 }}>
+              <img
+                src="https://placehold.co/300x400?text=Map"
+                alt="Placeholder map of Vagamon region"
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
+              />
             </Paper>
           </Box>
         </Stack>
