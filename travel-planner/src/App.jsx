@@ -4,6 +4,8 @@ import Itinerary from './views/Itinerary';
 import Homepage from './views/Homepage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import TravelPage from './views/ItineraryDetails';
+import MapComponent from './views/MapComponent';
+import WeatherApp from "./views/Weather"
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       <Route path = "/" element = {<Homepage/>} />
       <Route path = "/itinerary" element = {<Itinerary/>} />
       <Route path = "/itinerary/:itinerary_number" element = {<TravelPage/>} />
+      <Route path = "/map" element = {<MapComponent/>}/>
+      <Route path = "/weather" element={<WeatherApp/>}></Route>
     </Routes>
     </Router>
     

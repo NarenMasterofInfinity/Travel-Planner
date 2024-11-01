@@ -27,7 +27,7 @@ const Header = () => {
         </NavbarItem>
         <NavbarItem>
           <Link color="foreground" href="#">
-            Weather
+           <RouterLink to = "/weather">Weather</RouterLink>
           </Link>
         </NavbarItem>
         <NavbarItem>

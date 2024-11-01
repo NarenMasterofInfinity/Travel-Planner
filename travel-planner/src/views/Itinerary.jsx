@@ -11,7 +11,7 @@ const Trips = () => {
     <>
     <div className="flex flex-col items-center justify-center mt-20">
       <div className="flex justify-between space-x-4">
-        {/* Create a New Trip Card */}
+        
         <div className="w-72 p-5 border border-gray-300 rounded-lg hover:border-teal-500 transition duration-300">
           <div className="flex items-center">
             <svg

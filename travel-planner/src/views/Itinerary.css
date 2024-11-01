@@ -1,0 +1,12 @@
+.custom-timeline {
+    align-items: flex-start; /* Align the timeline to the left */
+  }
+  
+  .custom-timeline .MuiTimelineItem-root {
+    justify-content: flex-start; /* Ensure each item starts on the left */
+  }
+  
+  .custom-timeline .MuiTimelineContent-root {
+    text-align: left; /* Align text to the left */
+  }
+  
