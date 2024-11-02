@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import TravelPage from './views/ItineraryDetails';
 import MapComponent from './views/MapComponent';
 import WeatherApp from "./views/Weather"
-
+import CreateItinerary from "./views/CreateItinerary"
 function App() {
   return (
     <>
@@ -17,9 +17,9 @@ function App() {
       <Route path = "/itinerary/:itinerary_number" element = {<TravelPage/>} />
       <Route path = "/map" element = {<MapComponent/>}/>
       <Route path = "/weather" element={<WeatherApp/>}></Route>
+      <Route path = "/create" element = {<CreateItinerary/>}></Route>
     </Routes>
     </Router>
-    
 
     </>
   );
