@@ -28,7 +28,7 @@ const getWeatherIcon = (temperature) => {
 };
 
 const WeatherApp = () => {
-  const [place, setPlace] = useState("Berlin");
+  const [place, setPlace] = useState("Chennai");
   const [latitude, setLatitude] = useState(52.52);
   const [longitude, setLongitude] = useState(13.41);
   const [weatherData, setWeatherData] = useState(null);

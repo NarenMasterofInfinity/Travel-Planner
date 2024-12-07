@@ -2,6 +2,8 @@ import React from 'react';
 import { Drawer, Typography, TextField, Button } from '@mui/material';
 
 const Drawers = ({ 
+  itineraryNumber,
+  dayIndex,
   open, 
   onClose, 
   onAddActivity, 

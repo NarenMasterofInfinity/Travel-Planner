@@ -1,8 +1,10 @@
 package travelplanner.backend;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.mapping.Language;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,7 +12,7 @@ import java.util.Optional;
 public class ItineraryService {
 
     @Autowired
-    private ItineraryRepository itineraryRepository;
+    ItineraryRepository itineraryRepository;
 
     public List<Itinerary> findAll() {
         return itineraryRepository.findAll();
@@ -32,7 +34,7 @@ public class ItineraryService {
         Optional<Itinerary> itinerary = itineraryRepository.findById(id);
         if (itinerary.isPresent()) {
             Itinerary it = itinerary.get();
-            List<List<Itinerary.ActivityEntry>> activities = it.getActivities();
+            ArrayList<ArrayList<Itinerary.ActivityEntry>> activities = it.getActivities();
             activities.get(dayIndex).remove(activityIndex);
             it.setActivities(activities);
             itineraryRepository.save(it);
@@ -53,12 +55,18 @@ public class ItineraryService {
         return false;
     }
 
-    public void addNewActivity(String id, int dayIndex, Itinerary.ActivityEntry entry) {
-        Optional<Itinerary> itinerary = itineraryRepository.findById(id);
+    public void addNewActivity(String index, int dayIndex, Itinerary.ActivityEntry entry) {
+        Optional<Itinerary> itinerary = itineraryRepository.findById(index);
         if (itinerary.isPresent()) {
             Itinerary it = itinerary.get();
-            List<List<Itinerary.ActivityEntry>> activities = it.getActivities();
+            ArrayList<ArrayList<Itinerary.ActivityEntry>> activities = it.getActivities();
+            if(activities == null) {
+                activities = new ArrayList<>();
+                activities.add(new ArrayList<>());
+            }
             activities.get(dayIndex).add(entry);
+            it.setActivities(activities);
+            itineraryRepository.save(it);
         }
     }
 
@@ -66,7 +74,7 @@ public class ItineraryService {
         Optional<Itinerary> optionalItinerary = itineraryRepository.findById(id);
         if(optionalItinerary.isPresent()) {
             Itinerary it = optionalItinerary.get();
-            List<List<Itinerary.ActivityEntry>> activities = it.getActivities();
+            ArrayList<ArrayList<Itinerary.ActivityEntry>> activities = it.getActivities();
             activities.get(dayIndex).set(activityIndex, activityEntry);
             it.setActivities(activities);
             itineraryRepository.save(it);
@@ -75,6 +83,10 @@ public class ItineraryService {
 
     public List<Itinerary> findItinerariesByUsername(String username) {
         return itineraryRepository.findItinerariesByUsername(username);
+    }
+
+    public String translateText(String text, String source, String dest){
+        return LanguageTranslation.doTranslation(text, source, dest);
     }
 
     public void saveCreateItinerary(Itinerary itinerary) {

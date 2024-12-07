@@ -3,10 +3,17 @@ package travelplanner.backend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+
+
+
+
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
 
     public boolean createUser(User user) {
         String username = user.getUsername();
@@ -19,6 +26,10 @@ public class UserService {
 
     public User getUserByUsername(String username) {
         return userRepository.findById(username).get();
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public boolean verifyUser(String username, String password) {

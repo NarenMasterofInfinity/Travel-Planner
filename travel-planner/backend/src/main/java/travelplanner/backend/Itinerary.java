@@ -3,6 +3,7 @@ package travelplanner.backend;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,16 +12,27 @@ public class Itinerary {
 
     @Id
     private String id;
+
+    private String index;
     private String location;
     private String title;
     private String username;
     private Date startDate;
     private Date endDate;
-    private List<List<ActivityEntry>> activities;
+    private ArrayList<ArrayList<ActivityEntry>> activities;
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
+    }
 
     public String getId() {
         return id;
     }
+
 
     public void setId(String id) {
         this.id = id;
@@ -66,17 +78,18 @@ public class Itinerary {
         this.endDate = endDate;
     }
 
-    public List<List<ActivityEntry>> getActivities() {
+    public ArrayList<ArrayList<ActivityEntry>> getActivities() {
         return activities;
     }
 
-    public void setActivities(List<List<ActivityEntry>> activities) {
+    public void setActivities(ArrayList<ArrayList<ActivityEntry>> activities) {
         this.activities = activities;
     }
 
     public static class ActivityEntry {
         @Id
         private String activityId;
+        private int index;
         private String time;
         private String mode;
         private String activity;
@@ -89,8 +102,14 @@ public class Itinerary {
         private String restaurantName;
         private Date reservationDate;
         private String notes;
-        private String iconLabel;
 
+        public int getIndex() {
+            return index;
+        }
+
+        public void setIndex(int index) {
+            this.index = index;
+        }
 
         public String getActivityId() {
             return activityId;
@@ -196,12 +215,5 @@ public class Itinerary {
             this.notes = notes;
         }
 
-        public String getIconLabel() {
-            return iconLabel;
-        }
-
-        public void setIconLabel(String iconLabel) {
-            this.iconLabel = iconLabel;
-        }
     }
 }

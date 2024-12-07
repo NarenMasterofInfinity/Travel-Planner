@@ -1,51 +1,111 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Link,
   Button,
 } from "@nextui-org/react";
-import { Link as RouterLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
 const Header = () => {
+  const [loggedIn, setLoggedIn] = useState(localStorage.getItem("username") != null ? true : false);
+  const OnLogOut = () => {
+    localStorage.removeItem("username");
+    localStorage.clear();
+    setLoggedIn(false);
+  }
   return (
-    <Navbar position="static">
+    <Navbar position="static" isBordered>
       <NavbarBrand>
-        <p className="font-bold text-inherit">Travel-Planner</p>
+        <NavLink
+          to="/"
+          exact
+          className={({ isActive }) =>
+            isActive
+              ? "font-bold text-[#34e0a1] transform scale-105 transition-all duration-300 ease-in-out"
+              : "font-bold text-inherit  "
+          }
+        >
+          Travel-Planner
+        </NavLink>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
-          <Link color="foreground" href="#">
-            Discover
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            <RouterLink to="/itinerary">Itineraries</RouterLink>
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-           <RouterLink to = "/weather">Weather</RouterLink>
-          </Link>
+          <NavLink
+            to="/itinerary"
+            className={({ isActive }) =>
+              isActive
+                ? "font-bold text-[#34e0a1] transform scale-105 transition-all duration-300 ease-in-out"
+                : "text-inherit "
+            }
+          >
+            Itineraries
+          </NavLink>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="#">
+          <NavLink
+            to="/weather"
+            className={({ isActive }) =>
+              isActive
+                ? "font-bold text-[#34e0a1] transform scale-105 transition-all duration-300 ease-in-out"
+                : "text-inherit "
+            }
+          >
+            Weather
+          </NavLink>
+        </NavbarItem>
+        <NavbarItem>
+          <NavLink
+            to="/translate"
+            className={({ isActive }) =>
+              isActive
+                ? "font-bold text-[#34e0a1] transform scale-105 transition-all duration-300 ease-in-out"
+                : "text-inherit "
+            }
+          >
             Translate
-          </Link>
+          </NavLink>
         </NavbarItem>
       </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
-      </NavbarContent>
+      {!loggedIn && (
+        <NavbarContent justify="end">
+          <NavbarItem className="hidden lg:flex">
+            <NavLink
+              to="/signin"
+              className={({ isActive }) =>
+                isActive
+                  ? "font-bold text-blue-500 transform scale-105 transition-all duration-300 ease-in-out"
+                  : "text-inherit "
+              }
+            >
+              Sign In
+            </NavLink>
+          </NavbarItem>
+          <NavbarItem>
+            <Button as="a" href="/signup" color="primary" variant="flat">
+              Sign Up
+            </Button>
+          </NavbarItem>
+        </NavbarContent>
+      )}
+      {loggedIn && (
+        <NavbarContent justify="end">
+          <NavbarItem className="hidden lg:flex">
+            <NavLink
+              to="/"
+              onClick={OnLogOut}
+            >
+              Log out
+            </NavLink>
+          </NavbarItem>
+          <NavbarItem>
+            <Button as="a" href="/profile" color="primary" variant="flat">
+              User Profile
+            </Button>
+          </NavbarItem>
+        </NavbarContent>
+      )}
     </Navbar>
   );
 };

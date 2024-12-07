@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -8,7 +8,7 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus';
 import TwoWheelerIcon from '@mui/icons-material/TwoWheeler';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
-import Header from './Navbar'
+import Header from './Navbar';
 
 const myAPIKey = "3ba7cb49b39f49da912edae37c16974b"; 
 
@@ -35,10 +35,21 @@ const geocode = async (address) => {
   }
 };
 
-const RoutingMachine = ({ waypoints,locations, setDistanceInfo, transportMode }) => {
+
+const RoutingMachine = ({ waypoints, locations, setDistanceInfo, transportMode, myAPIKey }) => {
   const map = useMap();
+  const prevRouteRef = useRef(null);  // To track the previously drawn route
+  const prevMarkersRef = useRef([]);  // To track the previously added markers
 
   React.useEffect(() => {
+    // Clear previous route and markers
+    if (prevRouteRef.current) {
+      map.removeLayer(prevRouteRef.current);  // Remove previous route
+    }
+    prevMarkersRef.current.forEach((marker) => map.removeLayer(marker));  // Remove previous markers
+    prevMarkersRef.current = [];  // Reset the markers array
+
+    // Only proceed if there are at least two waypoints
     if (waypoints.length >= 2) {
       const url = `https://api.geoapify.com/v1/routing?waypoints=${waypoints
         .map((wp) => wp.join(','))
@@ -47,6 +58,7 @@ const RoutingMachine = ({ waypoints,locations, setDistanceInfo, transportMode })
       console.log(url);
       console.log(waypoints);
       console.log(locations);
+
       fetch(url)
         .then((res) => res.json())
         .then((result) => {
@@ -54,17 +66,20 @@ const RoutingMachine = ({ waypoints,locations, setDistanceInfo, transportMode })
             throw new Error('No routing data found');
           }
 
-          L.geoJSON(result, {
+          // Draw the new route on the map
+          const routeLayer = L.geoJSON(result, {
             style: () => ({
               color: 'rgba(20, 137, 255, 0.7)',
               weight: 5,
             }),
           }).addTo(map);
-          
-          // Create markers for each waypoint with popups
+          prevRouteRef.current = routeLayer;  // Save reference to the new route layer
+
+          // Create markers for each waypoint and add them to the map
           waypoints.forEach((wp, index) => {
             const marker = L.marker([wp[0], wp[1]]).addTo(map);
             marker.bindPopup(`${locations[index]} (Lat: ${wp[0]}, Lng: ${wp[1]})`);
+            prevMarkersRef.current.push(marker);  // Track the marker for future removal
           });
 
           // Calculate and set distance info
@@ -81,7 +96,7 @@ const RoutingMachine = ({ waypoints,locations, setDistanceInfo, transportMode })
           setDistanceInfo({ distance: null, duration: null }); // Reset on error
         });
     }
-  }, [waypoints, map,locations, setDistanceInfo, transportMode]);
+  }, [waypoints, map, locations, setDistanceInfo, transportMode, myAPIKey]);
 
   return null;
 };
@@ -119,14 +134,14 @@ const MapComponent = () => {
         passthroughs.map((v) => geocode(v.trim())) // Handle multiple via points
       );
 
-      const allWaypoints = [fromCoords, toCoords, ...viaCoords];
+      const allWaypoints = [fromCoords, ...viaCoords, toCoords];
 
       // Check if waypoints are valid
       const validWaypoints = allWaypoints.every((wp) => Array.isArray(wp) && wp.length === 2);
       if (!validWaypoints) {
         throw new Error('Invalid waypoints');
       }
-      const allLocations = [from, to, ...passthroughs];
+      const allLocations = [from, ...passthroughs, to];
       setWaypoints(allWaypoints);
       setlocations(allLocations);
       setError('');
@@ -168,6 +183,7 @@ const MapComponent = () => {
           </div>
         ))}
         {/* Dropdown for transport mode selection */}
+        {"Modes of Transport: "}
         <ToggleButtonGroup
       value={transportMode}
       exclusive
@@ -199,7 +215,7 @@ const MapComponent = () => {
           <div className="distance-info">
             <h3>Route Information</h3>
             <p>Distance: {distanceInfo.distance} km</p>
-            <p>Duration: {Math.floor(distanceInfo.duration/60)} hr {distanceInfo.duration%60} min </p>
+            <p>Duration: {Math.floor(distanceInfo.duration/60)} hr {(distanceInfo.duration%60).toFixed(0)} min </p>
           </div>
         )}
       </div>
@@ -213,7 +229,7 @@ const MapComponent = () => {
             attribution='Powered by Geoapify | © OpenMapTiles | © OpenStreetMap contributors'
             url={`https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${myAPIKey}`}
           />
-          {waypoints.length >= 2 && <RoutingMachine waypoints={waypoints} locations={locations} setDistanceInfo={setDistanceInfo} transportMode={transportMode} />}
+          {waypoints.length >= 2 && <RoutingMachine waypoints={waypoints} locations={locations} setDistanceInfo={setDistanceInfo} transportMode={transportMode} myAPIKey={myAPIKey}/>}
         </MapContainer>
       </div>
     </div>
