@@ -23,12 +23,13 @@ const CreateItinerary = () => {
           endDate: endDate,
         }
       );
-      setindex(msg);
+      setindex(msg.data);
+      console.log("Index: " + msg.data);
       if (index === -1) {
         setMessage("Unable to create now. Try again later");
       } else {
         setMessage("Successfully created");
-        navigate(`/itinerary/${index}`)
+        navigate(`/itinerary/${msg.data}`)
 
       }
     };
